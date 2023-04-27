@@ -61,22 +61,21 @@ variable "groups" {
 variable "kms_defaults" {
   description = "Defaults used for KMS keys."
   type = object({
-    locations       = list(string)
-    rotation_period = string
+    locations       = optional(list(string), [])
+    rotation_period = optional(string)
   })
   default = {
-    locations       = ["europe", "europe-west1", "europe-west3", "global"]
-    rotation_period = "7776000s"
+    locations = ["europe", "global"]
   }
 }
 
 variable "kms_keys" {
   description = "KMS keys to create, keyed by name. Null attributes will be interpolated with defaults."
   type = map(object({
-    iam             = map(list(string))
-    labels          = map(string)
-    locations       = list(string)
-    rotation_period = string
+    iam             = optional(map(list(string)), {})
+    labels          = optional(map(string), {})
+    locations       = optional(list(string))
+    rotation_period = optional(string)
   }))
   default = {}
 }

@@ -17,8 +17,8 @@
 locals {
   kms_keys = {
     for k, v in var.kms_keys : k => {
-      iam    = coalesce(v.iam, {})
-      labels = coalesce(v.labels, {})
+      iam    = v.iam
+      labels = v.labels
       locations = (
         v.locations == null
         ? var.kms_defaults.locations
@@ -31,12 +31,13 @@ locals {
       )
     }
   }
-  kms_locations = distinct(flatten([
+  kms_locations = distinct(compact(flatten([
     for k, v in local.kms_keys : v.locations
-  ]))
+  ])))
   kms_locations_keys = {
     for loc in local.kms_locations : loc => {
-      for k, v in local.kms_keys : k => v if contains(v.locations, loc)
+      for k, v in local.kms_keys :
+      k => v if contains(v.locations, loc)
     }
   }
   project_services = [
