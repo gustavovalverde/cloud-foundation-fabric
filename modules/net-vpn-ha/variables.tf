@@ -57,7 +57,7 @@ variable "router_config" {
   description = "Cloud Router configuration for the VPN. If you want to reuse an existing router, set create to false and use name to specify the desired router."
   type = object({
     create    = optional(bool, true)
-    asn       = number
+    asn       = optional(number)
     name      = optional(string)
     keepalive = optional(number)
     custom_advertise = optional(object({
